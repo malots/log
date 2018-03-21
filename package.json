@@ -1,0 +1,31 @@
+{
+  "name": "@malots/log",
+  "version": "1.0.0",
+  "description": "Log package",
+  "main": "index.js",
+  "scripts": {
+    "test": "babel-node ./test/tests.js",
+    "start": "babel-node index.js",
+    "babel": "npx babel ./src/log.js --out-file index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malots/log.git"
+  },
+  "keywords": [
+    "log",
+    "logging"
+  ],
+  "author": "leovene",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/malots/log/issues"
+  },
+  "homepage": "https://github.com/malots/log#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.0",
+    "tape": "^4.9.0"
+  }
+}
