@@ -1,21 +1,27 @@
 import fs from 'fs';
 import console from 'console';
+import moment from 'moment';
 
 const privates = new WeakMap();
 
 class Log {
     constructor(type,level,path='') {
-        type = type.toLowerCase();
-        level = level.toLowerCase();
+        type = type.toLowerCase().trim();
+        level = level.toLowerCase().trim();
+        path = returnCorrectPath(path);
         privates.set(this,{type,level,path});
     }
 
     setType(type) {
-        privates.get(this)['type'] = type;
+        privates.get(this)['type'] = type.toString().trim();
     }
 
     setLevel(level) {
-        privates.get(this)['level'] = level;
+        privates.get(this)['level'] = level.toString().trim();
+    }
+
+    setPath(path) {
+        privates.get(this)['path'] = returnCorrectPath(path.toString());
     }
 
     getType() {
@@ -26,8 +32,12 @@ class Log {
         return privates.get(this)['level'];
     }
 
+    getPath() {
+        return privates.get(this)['path'];
+    }
+
     input(message) {
-        if (getType(privates.get(this)['type']) == 0) {
+        if (getType(privates.get(this)['type']) == 1) {
             if (dirExistsOrCreate(privates.get(this)['path'])) {
                 printFile(privates.get(this)['level'],message,privates.get(this)['path']);
             }
@@ -56,30 +66,28 @@ function printConsole(level,message) {
 }
 
 function printFile(level,message,path) {
-    let template = '';
-    switch(level,template) {
-    case 'log': template = '{LOG}'; break;
-    case 'info': template = '[INFO]'; break;
-    case 'warn': template = '*WARN*'; break;
-    case 'error': template = '**ERROR**'; break;
-    default: template = '{LOG}'; break;
-    }
-    let head = Date.now().toString() + ' - ' + template;
-    let footer = '-----------------------------------------------' + template;
-    var logStream = fs.createWriteStream(path, {'flags': 'a'});
-    logStream.write(head);
-    logStream.write(message);
-    logStream.end(footer);
-    logStream.close();
+    const resultSwitch = function(level) {
+        switch(level) {
+        case 'log': return '{LOG}';
+        case 'info': return '[INFO]'; 
+        case 'warn': return '*WARN*'; 
+        case 'error': return '**ERROR**'; 
+        default: return '{LOG}'; 
+        }
+    };
+    let template = resultSwitch(level);
+    message = message + '\n';
+    let head = moment().format().toString() + ' - ' + '<=' + template+'\n';
+    let footer = '-----------------------------------------------' + '=>' + template+'\n';
+    let file = path+moment().format('dMMYYYY')+'.log';
+    writeFile(file,head+message+footer);
 }
 
 function dirExistsOrCreate(path) {
     if (path != '') {
         try{
-            if(fs.lstatSync(path).isDirectory()) {
-                if (!fs.existsSync(path)){
-                    fs.mkdirSync(path);
-                } 
+            if (!fs.existsSync(path)){
+                fs.mkdirSync(path);
             }
             return true;
         }catch(e){
@@ -88,6 +96,31 @@ function dirExistsOrCreate(path) {
         }
     }
     return false;  
+}
+
+function returnCorrectPath(path) {
+    if (path != '') {
+        if (!path.endsWith('/')) {
+            path += '/';
+        }
+    }
+    return path.trim();
+}
+
+function writeFile(file,data) {
+    try {
+        fs.open(file, 'a', (err, fd) => {
+            if (err) throw err;
+            fs.appendFile(fd, data, 'utf8', (err) => {
+                fs.close(fd, (err) => {
+                    if (err) throw err;
+                });
+                if (err) throw err;
+            });
+        });
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 export default Log;
