@@ -127,7 +127,7 @@ function printFile(level, message, path) {
     message = message + '\n';
     var head = (0, _moment2.default)().format().toString() + ' - ' + '<=' + template + '\n';
     var footer = '-----------------------------------------------' + '=>' + template + '\n';
-    var file = path + (0, _moment2.default)().format('dMMYYYY') + '.log';
+    var file = path + (0, _moment2.default)().format('DMMYYYY') + '.log';
     writeFile(file, head + message + footer);
 }
 

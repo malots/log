@@ -79,7 +79,7 @@ function printFile(level,message,path) {
     message = message + '\n';
     let head = moment().format().toString() + ' - ' + '<=' + template+'\n';
     let footer = '-----------------------------------------------' + '=>' + template+'\n';
-    let file = path+moment().format('dMMYYYY')+'.log';
+    let file = path+moment().format('DMMYYYY')+'.log';
     writeFile(file,head+message+footer);
 }
 
