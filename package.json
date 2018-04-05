@@ -1,6 +1,6 @@
 {
   "name": "@malots/log",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Log package",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/malots/log.git"
+    "url": "git+https://github.com/leovene/log.git"
   },
   "keywords": [
     "log",
