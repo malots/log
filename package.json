@@ -1,12 +1,12 @@
 {
   "name": "@malots/log",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Log package",
   "main": "index.js",
   "scripts": {
     "test": "babel-node ./test/tests.js",
     "start": "babel-node index.js",
-    "babel": "npx babel ./src/log.js --out-file index.js"
+    "build": "npx babel ./src/log.js --out-file index.js"
   },
   "repository": {
     "type": "git",
