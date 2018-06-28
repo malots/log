@@ -1,51 +1,87 @@
-import fs from 'fs';
-import console from 'console';
-import moment from 'moment';
+'use strict';
 
-const privates = new WeakMap();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-class Log {
-    constructor(type, level, path = '') {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _console = require('console');
+
+var _console2 = _interopRequireDefault(_console);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var privates = Symbol();
+
+var Log = function () {
+    function Log(type, level) {
+        var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+        _classCallCheck(this, Log);
+
+        this[privates] = new WeakMap();
         type = type.toLowerCase().trim();
         level = level.toLowerCase().trim();
         path = returnCorrectPath(path);
-        privates.set(this, { type, level, path });
+        this[privates].set(this, { type: type, level: level, path: path });
     }
 
-    setType(type) {
-        privates.get(this)['type'] = type.toString().trim();
-    }
-
-    setLevel(level) {
-        privates.get(this)['level'] = level.toString().trim();
-    }
-
-    setPath(path) {
-        privates.get(this)['path'] = returnCorrectPath(path.toString());
-    }
-
-    getType() {
-        return privates.get(this)['type'];
-    }
-
-    getLevel() {
-        return privates.get(this)['level'];
-    }
-
-    getPath() {
-        return privates.get(this)['path'];
-    }
-
-    input(message) {
-        if (getType(privates.get(this)['type']) == 1) {
-            if (dirExistsOrCreate(privates.get(this)['path'])) {
-                printFile(privates.get(this)['level'], message, privates.get(this)['path']);
-            }
-        } else {
-            printConsole(privates.get(this)['level'], message);
+    _createClass(Log, [{
+        key: 'setType',
+        value: function setType(type) {
+            this[privates].get(this)['type'] = type.toString().trim();
         }
-    }
-}
+    }, {
+        key: 'setLevel',
+        value: function setLevel(level) {
+            this[privates].get(this)['level'] = level.toString().trim();
+        }
+    }, {
+        key: 'setPath',
+        value: function setPath(path) {
+            this[privates].get(this)['path'] = returnCorrectPath(path.toString());
+        }
+    }, {
+        key: 'getType',
+        value: function getType() {
+            return this[privates].get(this)['type'];
+        }
+    }, {
+        key: 'getLevel',
+        value: function getLevel() {
+            return this[privates].get(this)['level'];
+        }
+    }, {
+        key: 'getPath',
+        value: function getPath() {
+            return this[privates].get(this)['path'];
+        }
+    }, {
+        key: 'input',
+        value: function input(message) {
+            if (getType(this[privates].get(this)['type']) == 1) {
+                if (dirExistsOrCreate(this[privates].get(this)['path'])) {
+                    printFile(this[privates].get(this)['level'], message, this[privates].get(this)['path']);
+                }
+            } else {
+                printConsole(this[privates].get(this)['level'], message);
+            }
+        }
+    }]);
+
+    return Log;
+}();
 
 function getType(type) {
     switch (type) {
@@ -61,20 +97,20 @@ function getType(type) {
 function printConsole(level, message) {
     switch (level) {
         case 'log':
-            console.log(message);break;
+            _console2.default.log(message);break;
         case 'info':
-            console.info(message);break;
+            _console2.default.info(message);break;
         case 'warn':
-            console.warn(message);break;
+            _console2.default.warn(message);break;
         case 'error':
-            console.error(message);break;
+            _console2.default.error(message);break;
         default:
-            console.log(message);break;
+            _console2.default.log(message);break;
     }
 }
 
 function printFile(level, message, path) {
-    const resultSwitch = function (level) {
+    var resultSwitch = function resultSwitch(level) {
         switch (level) {
             case 'log':
                 return '{LOG}';
@@ -88,23 +124,23 @@ function printFile(level, message, path) {
                 return '{LOG}';
         }
     };
-    let template = resultSwitch(level);
+    var template = resultSwitch(level);
     message = message + '\n';
-    let head = moment().format().toString() + ' - ' + '<=' + template + '\n';
-    let footer = '-----------------------------------------------' + '=>' + template + '\n';
-    let file = path + moment().format('DMMYYYY') + '.log';
+    var head = (0, _moment2.default)().format().toString() + ' - ' + '<=' + template + '\n';
+    var footer = '-----------------------------------------------' + '=>' + template + '\n';
+    var file = path + (0, _moment2.default)().format('DMMYYYY') + '.log';
     writeFile(file, head + message + footer);
 }
 
 function dirExistsOrCreate(path) {
     if (path != '') {
         try {
-            if (!fs.existsSync(path)) {
-                fs.mkdirSync(path);
+            if (!_fs2.default.existsSync(path)) {
+                _fs2.default.mkdirSync(path);
             }
             return true;
         } catch (e) {
-            console.error(e);
+            _console2.default.error(e);
             return false;
         }
     }
@@ -122,18 +158,18 @@ function returnCorrectPath(path) {
 
 function writeFile(file, data) {
     try {
-        fs.open(file, 'a', (err, fd) => {
+        _fs2.default.open(file, 'a', function (err, fd) {
             if (err) throw err;
-            fs.appendFile(fd, data, 'utf8', err => {
-                fs.close(fd, err => {
+            _fs2.default.appendFile(fd, data, 'utf8', function (err) {
+                _fs2.default.close(fd, function (err) {
                     if (err) throw err;
                 });
                 if (err) throw err;
             });
         });
     } catch (err) {
-        console.error(err);
+        _console2.default.error(err);
     }
 }
 
-export default Log;
+exports.default = Log;
