@@ -1,6 +1,6 @@
 {
   "name": "@malots/log",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Log package",
   "main": "index.js",
   "scripts": {
@@ -24,11 +24,10 @@
   "homepage": "https://github.com/malots/log#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.19.0",
-    "tape": "^4.9.0"
+    "babel-preset-env": "^1.7.0",
+    "tape": "^4.9.1"
   },
   "dependencies": {
-    "moment": "^2.21.0"
+    "moment": "^2.22.2"
   }
 }

@@ -1,5 +1,5 @@
 import test from 'tape';
-import Log from '../src/Log';
+import Log from '..';
 
 const log = new Log('console','info');
 
